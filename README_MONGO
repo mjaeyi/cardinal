@@ -1,0 +1,71 @@
+***README for database creation on MONGODB***
+
+1) To start mongoDB
+  $ mongo
+
+
+2) To exit mongoDB
+  > exit
+
+
+3) To create a new database
+  > use DATABASE_NAME
+    EX: > use OCI_test
+
+  Remark: If the DATABASE_NAME does not already exist, mongo will create and switch to that designated database.
+          However, to switch to an already existing database, you use the same command: use
+
+
+4) To create a collection
+  > db.createCollection(name, options)
+    EX: > db.createCollection(patients)
+
+  Remark: The "options" parameter is optional. It can be used to specify the size of the collection. In traditional
+          SQL databases, collections are the same thing as tables.  This step is not explicitly required as mongoDB
+          will automatically create a collection if user attempts to insert a document into a collection that does 
+          not currently exist.
+
+
+5) To insert into a collection
+  > db.collectionName.insert(document)
+    EX: > db.patients.insert({
+              _id: "oc0183",
+              age: 660811,
+              surgery: [36146],
+              ca125: [{date: 36463, value: 10}, {date: 36505, value: 11}],
+              plot: "/data/oci/oc0183/oc0183.pdf",
+              score: "/data/oci/oc0183/Patient_183_drug_response_prediction.pdf"
+         })
+
+  Remark: As shown, a document can have any field or lack of fields and is not bound to the traditional schema requirements
+          as an SQL database. It also allows dynamic storage of various data types as shown above. The only requirement is 
+          the "_id" field. This must be a unique id to differentiate the documents. If one is not specified during the
+          insertion, mongoDB will create a unique id automatically.
+
+
+6) To update a document
+  > db.collectionName.update({}, {$set: {}})
+    EX: > db.patients.update({_id: "oc0183"}, {$set: {score: "/data/oci/oc0183"}})
+
+  Remark: The first {} is for the identifying field of the document you wish to update. The second {} followed by the $set
+          is the field and value the user wishes to update. An extra parameter $multi can be set to true to allow multiple
+          updates at one time.
+
+
+7) To append values to a document
+  > db.collectionName.update({}, {$push: {}})
+    EX: > db.patients.update({_id: "oc0183"}, {$push: {ca125: {$each: [{date: 37000, value: 15}, {date: 38000, value 16}]}}})
+
+  Remark: Again the first {} is for the identifying field of the document you wish to append a value to. Instead of $set, we
+          use $push to add a value to the end of the field. Note: This assumes that the field you are appending into was 
+          initialized to hold an array. The $each is important to specify if the user is appending more than one value into
+          the field. Otherwise, without the $each, it will append the speficied array of tuples to the end of the exisitng
+          array rather than combining the two arrays.
+
+
+8) To see the documents in the collection
+  > db.collectionName.find()
+    EX: > db.patients.find().pretty()
+
+  Remark: find() will list all the documents in the collection. You may add parameters to find() in order to see less or
+          a specific amount of documents. pretty() is an added function to display the document in a visibly easier format.

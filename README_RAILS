@@ -1,0 +1,172 @@
+###############################################################################
+#Generation of a rails application
+###############################################################################
+
+
+*******************************************************************************
+*Create a new rails app
+*******************************************************************************
+The basic command to generate a new rails app is:
+  
+  rails new APP_NAME
+
+This will create a new directory structure that will create and hold all the 
+files for the new app named APP_NAME. By default, rails uses Active_Record. This
+is a model that will interact with the database. However, Active_Record is used
+for SQL type databases. As the database in this project will be NoSQL, you can
+tell rails to skip the implementation of Active_Record like so:
+  
+  rails new APP_NAME --skip-active-record 
+
+Now navigate into the directory APP_NAME that has now been created. The main 
+directories of interest are "apps", and config. The "apps" directory will
+contain all the relevant files for the actual framework of the website. (ie.
+models (database schema), views (actual pages of the websites) etc...) The
+config folder will hold important files that set up and maintain the website.
+(ie. boot.rb (settings when booting up the server), mongoid.yml (config file
+for mongodb), routes.rb (the pathing for website). Another important files is
+the GEMFILE. This contains a list of all the GEMS (modules) you want to run and
+maintain for the app and will now be modified to allow usage of MongoDB.
+
+*******************************************************************************
+*Setting up GEMS
+*******************************************************************************
+GEMs are the modules or libraries for rails. To add or change the version of an
+exiting GEM, you must do it in the GEMFILE located in the directory of APP_NAME.
+Rails will come standard with many basic GEMs needed to run the rails app. However,
+the user can add or modify as they please. The general syntax is as follows:
+
+  gem 'gem-name', '~> version#'
+
+**Remark: You can also specify the version# with comparisons. For instance:
+  '>= 1.3.0' This specifies a version greater than or equal to 1.3.0 for a 
+particular GEM.
+
+Now, since we skipped the implemenation of Active_Record, we must use a GEM to link
+our framework to the database. Since this project utilizes MongoDB, these GEMs
+will work specifically for them. Research the ODM (Object-Document-Mapper) for 
+your specific database. There are several different ODMs for MongoDB but for
+this project Mongoid will be used. The command to add the Mongoid GEM is:
+
+  gem 'mongoid', '~> 5.1.1'    *At the time of writing, this is the latest ver.
+
+Now after adding the above command and another other GEMs you wish, save and quit.
+To now install the GEMs we specified run this command:
+
+  bundle install
+
+This should install all the GEMS provided no erros.
+
+*******************************************************************************
+*Setting up Mongoid
+*******************************************************************************
+Now that the Mongoid gem was installed, we need to create the mongoid config
+file to set up the file that will link our rails framework to the database.
+The command is as follows:
+
+  rails generate mongoid:config
+
+  **Alternative syntax: rails g mongoid:config
+
+This will now create the "mongoid.yml" file under /APP_NAME/config/.  In this file
+there are many specifications as to the Mongo database that can be modified.  By
+default and because of rails convention, the database used for the application
+will have the following naming scheme.
+
+  APP_NAME_development
+
+Therefore, you can find your database under that name inside mongo.
+
+*******************************************************************************
+*Starting up with the basics
+*******************************************************************************
+Rails strictly follows DRY or Don't Repeat Yourself convention. As such, Rails
+breaks up the app into MVC or Model, View, Controller scheme. Unlike other 
+frameworks, Rails using the Model to interact with the database rather than 
+directly with it. As such, you don't need to actually know the database language
+(SQL, or Mongo syntax) but rather the Ruby/Rails syntax. This provides a really
+easy way to work with any database. In the previous section, we installed the
+mongoid GEM. This GEM is what will help interact with the database. The View is
+just like what it sounds. It is the page that will be shown to the user as they
+interact with the framework/database using the browser. This is where all the 
+boiler plate html code mixed with ruby code goes. Anything specified in the Views
+will be shown on the browser. The Controller is what links everything else. It is
+the "actions" that will be processed through the website. For instance, if the user
+clicks on a link, the input will be sent to the Controller and the Controller will
+determine what happens next. The Controller will send the request through "routes" 
+and these routes are specified in routes.rb.
+
+Let's start with a scaffold. A scaffold in Rails is a very convenient feature that
+will auto generate the Models, Views, and Controllers while setting the necessary
+routes. It also includes basic features such as create, destroy, and update which
+follows the CRUD format. The syntax is as follows:
+
+  rails generate scaffold SCAFFOLD_NAME FIELD_NAME1:FIELD_TYPE1 FIELD2:TYPE2 ...
+  
+  *Alternative syntax: rails g scaffold ...
+
+  Command for this project:
+  rails g scaffold Patient _id:String age:Integer plot:String score:String
+
+The SCAFFOLD_NAME is effectively the name of the page, the model and controller.
+In the example of this project, the SCAFFOLD_NAME is Patient. Few things to note
+is that Rails is very strict on convention and it is strongly emphasized to learn
+the naming convention for Rails/Ruby. In general, the SCAFFOLD_NAME and Model_NAME
+needs to be singular and the first letter is capitalized. However, when the different
+MVC files are created they will have the following syntax:
+
+  SCAFFOLD_NAME/MODEL_NAME: Patient
+  
+  "Model Naming Convention"
+    Table in database: patients
+    Class: Patient
+    Filename: /APP_NAME/app/model/patient.rb
+
+  "Controller Naming Convention"
+    Class: PatientsController
+    filename: /APP_NAME/app/controllers/patients_controller.rb
+
+  "View Naming Convention"
+    filenames: /APP_NAME/app/views/patients/...
+
+***Remark: Pay close attention to singular/plural forms as well have case sensitivity.
+***Remark2: When using and calling variables, a similar convention is used.
+
+After generating a scaffold, the website is actually done and ready to be tested.
+Rails literally does all the background stuff for you. To gain more flexibilty, you
+can generate each aspect of the MVC indivially using the following syntax:
+
+  rails generate model ...
+  rails generate controller ...
+  *Remark: To create views, create a directory following the naming convention
+           and use a text editor to write custom files. Again, look up and be
+           familiar with the naming convention. View files will end with the
+           extension .erb which stands for embedded ruby.
+
+*******************************************************************************
+*Testing the app through Rails' built in server
+*******************************************************************************
+Rails comes with a built in webrick server to help test in development. Now that
+a scaffold has been created we can test the app. Start the rails server:
+
+  rails server
+  *Alternative syntax: rails s
+
+By default, rails will start the server through localhost with port 3000. This can
+be changed as needed as such:
+
+  rails s -b ipaddress -p port#
+  *where -b binds to an specified ip and -p specifies the port number
+
+For this project, since we are running it remotely, we need to specify the ip address
+of the testing server. To find the ipaddress use the command:
+
+  ifconfig
+  *The ipnet address is the one you will use
+
+Once starting the server, you can open your browser and navigate to address of the 
+server. This now should show the rails homepage which means the server is running
+properly. From here you can add /scaffold_name_s/ (all lower case and plural) which
+will properly display the scaffold we just generated.
+
+

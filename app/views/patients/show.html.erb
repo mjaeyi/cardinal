@@ -1,0 +1,62 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @patient._id %>
+</p>
+
+<p>
+  <strong>Age:</strong>
+  <%= @patient.age %>
+</p>
+
+<p>
+  <strong>Plot:</strong>
+  <%= @patient.plot %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @patient.score %>
+</p>
+
+<h2>Patient Data</h2>
+<% if @patient.patient_infos.blank? %>
+<p>No Patient Data</p>
+<% end %>
+<% @patient.patient_infos.order_by(:date => 'asc').each do |info| %>
+<p>
+  <strong>Type:</strong>
+  <%= info.type %>
+
+  <strong>Date:</strong>
+  <%= info.date %>
+  <% if info.value.present? %>
+    <strong>Value:</strong>
+    <%= info.value %>
+  <% end %>
+</p>
+<% end %>
+
+<h2>Add Data</h2>
+<%= form_for([@patient, @patient.patient_infos.build]) do |f| %>
+  <div class="field">
+    <%= f.label :type %><br>
+    <%= f.collection_select :type, Type.all, :datatype, :datatype %>
+  </div>
+  <div class="field">
+    <%= f.label :date %><br>
+    <%= f.date_field :date %>
+  </div>
+  <div class="field">
+    <%= f.label :value %><br>
+    <%= f.text_field :value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Edit', edit_patient_path(@patient) %> |
+<%= link_to 'Back', patients_path %>
