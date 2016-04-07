@@ -35,6 +35,7 @@
     <strong>Value:</strong>
     <%= info.value %>
   <% end %>
+  <%= link_to 'Delete', patient_patient_info_path(@patient, info), method: :delete, data: { confirm: 'Are you sure?' } %>
 </p>
 <% end %>
 
