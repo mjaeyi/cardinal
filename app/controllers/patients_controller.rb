@@ -1,5 +1,6 @@
 class PatientsController < ApplicationController
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
+  before_action :pdf_patient, only: [:plot, :score]
 
   # GET /patients
   # GET /patients.json
@@ -19,6 +20,14 @@ class PatientsController < ApplicationController
 
   # GET /patients/1/edit
   def edit
+  end
+
+  def plot
+    send_file(@patient.plot, :filename => "plot.pdf", :disposition => 'inline', :type => "application/pdf")
+  end
+
+  def score
+    send_file(@patient.score, :filename => "score.pdf", :disposition => 'inline', :type => "application/pdf")
   end
 
   # POST /patients
@@ -65,6 +74,10 @@ class PatientsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_patient
       @patient = Patient.find(params[:id])
+    end
+
+    def pdf_patient
+      @patient = Patient.find(params[:format])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

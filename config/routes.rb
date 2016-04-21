@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   get 'patient_infos/index'
 
+  get 'patients/plot', to: 'patients#plot'
+  get 'patients/score', to: 'patients#score'
+  post 'patients/plot', to: 'patients#plot'
+  post 'patients/score', to: 'patients#score'
+
   resources :patients do
     resources :patient_infos
   end

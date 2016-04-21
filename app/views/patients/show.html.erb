@@ -12,12 +12,12 @@
 
 <p>
   <strong>Plot:</strong>
-  <%= @patient.plot %>
+  <%= link_to 'Plot PDF', patients_plot_path(@patient), method: :plot %>
 </p>
 
 <p>
   <strong>Score:</strong>
-  <%= @patient.score %>
+  <%= link_to 'Score PDF', patients_score_path(@patient), method: :score %>
 </p>
 
 <h2>Patient Data</h2>

@@ -5,8 +5,13 @@ class PatientInfosController < ApplicationController
   end
 
   def create
+    infos_param = patient_infos
+    exdate = Date.new(1900, 01, 01)
+    entry = Date.parse(patient_infos[:date])
+    infos_param[:date] = (entry - exdate).to_i
+
     @patient = Patient.find(params[:patient_id])
-    @patient_info = @patient.patient_infos.create(patient_infos)
+    @patient_info = @patient.patient_infos.create(infos_param)
     
     respond_to do |format|
       if @patient_info.save
