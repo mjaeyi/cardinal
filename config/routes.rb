@@ -1,10 +1,25 @@
 Rails.application.routes.draw do
+  get 'uploads/new'
+
+  get 'uploads/create'
+
   get 'patient_infos/index'
 
   get 'patients/plot', to: 'patients#plot'
   get 'patients/score', to: 'patients#score'
+  get 'patients/risk', to: 'patients#risk'
   post 'patients/plot', to: 'patients#plot'
   post 'patients/score', to: 'patients#score'
+  post 'patients/risk', to: 'patients#risk'
+
+  get 'patients/upload', to: 'patients#upload'
+  post 'patients/upload', to: 'patients#upload'
+
+  get 'patients/genplot', to: 'patients#genplot'
+  post 'patients/genplot', to: 'patients#genplot'
+
+  get 'patients/genrisk', to: 'patients#genrisk'
+  post 'patients/genrisk', to: 'patients#genrisk'
 
   resources :patients do
     resources :patient_infos

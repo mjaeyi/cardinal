@@ -1,0 +1,45 @@
+When creating a new patient, a new directory should be created for said patient under
+"/data/oci/USERID"
+"/data/oci/USERID/archive"
+*****DONE*****
+
+
+There should be another field to hold directory path. (model)
+*****DONE*****
+
+
+Plot and Score path should initially be left blank. (views - new patient page)
+*****DONE*****
+
+
+Plot and Score hyperlinks should only be made if a plot and score field exists. (views - show patient page)
+*****DONE*****
+
+
+A button to generate the plots and score (if there is microarray data). (views - show patient page)
+*****DONE*****
+  The button will extract patient data for ca125, surg, drugs and create a USERID.txt file in patient directory. (controller)
+
+  A script will process the USERID.txt file and format to USERID.pd file. (controller)
+
+  A script to generate the plot using the USERID.pd to USERID_plot.pdf (controller)
+  *****DONE*****
+
+  Plot field will now hold path to the USERID_plot.pdf (controller)
+     If USERID_plot.pdf already exists... overwrite or send to archive as timestamped? (controller)
+     Overwrite USERID.txt and USERID.pd
+     *****DONE*****
+
+       However... if many generates get called then archive folder will grow large... keep the 5 most recent?
+
+When deleting a patient, what should we do to the created directory files. (controller)
+  Archive or delete it?
+
+
+System Calls in Ruby
+<h2>Testing</h2>
+<% p = "/data/opensource/Cardinal/app/views/patients" %>
+<%   system("touch #{p}/test.txt") %>
+
+
+/data/opensource/PlotGen/ca125_plot_cardinal_v0.1.R /data/oci/USERID/USERID.pd

@@ -14,3 +14,4 @@
 
 # Ignore the database config file
 config/mongoid.yml
+doto.txt

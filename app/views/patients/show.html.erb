@@ -12,18 +12,38 @@
 
 <p>
   <strong>Plot:</strong>
-  <%= link_to 'Plot PDF', patients_plot_path(@patient), method: :plot %>
+  <% if @patient.plot.present? %>
+    <%= link_to 'Plot PDF', patients_plot_path(@patient), method: :plot %>
+  <% else %>
+    No plot has been generated
+  <% end %>
 </p>
 
 <p>
   <strong>Score:</strong>
-  <%= link_to 'Score PDF', patients_score_path(@patient), method: :score %>
+  <% if @patient.score.present? %>
+    <%= link_to 'Score PDF', patients_score_path(@patient), method: :score %>
+  <% else %>
+    No score has been generated
+  <% end %>
+
 </p>
+
+<p>
+  <strong>Risk:</strong>
+  <% if @patient.risk.present? %>
+    <%= link_to 'Risk PDF', patients_risk_path(@patient), method: :risk %>
+  <% else %>
+    No risk has been generated
+  <% end %>
+
+</p>
+
 
 <h2>Patient Data</h2>
 <% if @patient.patient_infos.blank? %>
 <p>No Patient Data</p>
-<% end %>
+<% else %>
 <% @patient.patient_infos.order_by(:date => 'asc').each do |info| %>
 <p>
   <strong>Type:</strong>
@@ -37,6 +57,7 @@
   <% end %>
   <%= link_to 'Delete', patient_patient_info_path(@patient, info), method: :delete, data: { confirm: 'Are you sure?' } %>
 </p>
+<% end %>
 <% end %>
 
 <h2>Add Data</h2>
@@ -58,6 +79,25 @@
   </div>
 <% end %>
 
+</br>
 
+<p>
+  <% if @patient.cfile.present? %>
+    <%= link_to 'Risk PDF', patients_risk_path(@patient), method: :risk %>
+  <% else %>
+    <strong>Upload</strong>
+    <%= form_tag({action: :upload}, multipart: true) do %>
+      <%= file_field_tag 'cfile' %>
+      <%= submit_tag "Upload" %>
+    <% end %>
+  <% end %>
+</p>
+
+
+<h2>Options</h2>
+<% if (@patient.patient_infos.blank? == false) %>
+  <%= link_to 'Generate Plot', patients_genplot_path(@patient), method: :genplot %> |
+  <%= link_to 'Generate Risk', patients_genrisk_path(@patient), method: :genrisk %> |
+<% end %>
 <%= link_to 'Edit', edit_patient_path(@patient) %> |
 <%= link_to 'Back', patients_path %>

@@ -1,28 +1,26 @@
-== README
+README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Cardinal - A scalable solution to Electronic Health Records
+______________________________________________________________________________
 
-Things you may want to cover:
+VERSION:
+"First Commit": Basic Rails template that connects to MongoDB
+"Update 0.1": Basic additional features to map patient infos to patient table
+"Update 0.2": Added display of PDFs for patient plots / creating patient
+              directory for new patients
+"Update 0.3": Added dynamic plot generation using Robin / Basic upload
 
-* Ruby version
+______________________________________________________________________________
 
-* System dependencies
+***Consider looking up README_MONGO and README_RAILS to understand how RAILS
+and MONGODB were created***
+______________________________________________________________________________
 
-* Configuration
+To deploy live: Phusion Passenger with Apache was utilized
+______________________________________________________________________________
 
-* Database creation
+To do list:
 
-* Database initialization
+*Finish a robust upload system
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+*Implement login management system
